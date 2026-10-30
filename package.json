@@ -1,0 +1,13 @@
+{
+  "name": "medilink",
+  "version": "0.1.0",
+  "description": "MediLink - Modern Hospital Operations & Clinical Healthcare Platform",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "test:backend": "pytest",
+    "migrate:backend": "python -m alembic -c backend/alembic.ini upgrade head",
+    "bootstrap:admin": "python -m backend.app.bootstrap_admin"
+  }
+}
