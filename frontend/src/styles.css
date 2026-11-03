@@ -3150,29 +3150,475 @@ a {
    RESPONSIVE
    ========================================================================== */
 
-@media (max-width: 1200px) {
+/* ==========================================================================
+   RESPONSIVE — TABLET & MOBILE
+   ========================================================================== */
+
+/* ── Hamburger button (hidden on desktop) ── */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1.5px solid var(--border-color);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.hamburger-btn:hover { background: var(--slate-100); }
+
+.hamburger-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--slate-600);
+  border-radius: 2px;
+}
+
+/* Mobile search toggle button (hidden on desktop) */
+.mobile-search-btn { display: none; }
+
+/* Mobile page title (hidden on desktop) */
+.mobile-page-title { display: none; }
+
+/* Sidebar mobile close button (hidden on desktop) */
+.sidebar-mobile-close {
+  display: none;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.06);
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  z-index: 1;
+}
+
+.sidebar-mobile-close:hover {
+  background: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.9);
+}
+
+/* Mobile search bar — slides in below header */
+.mobile-search-bar {
+  display: none;
+}
+
+/* Sidebar backdrop */
+.sidebar-backdrop {
+  display: none;
+}
+
+/* btn-label utility (hides text labels on small screens) */
+.btn-label { /* visible by default */ }
+
+/* ── ≤ 1280px — large tablet ── */
+@media (max-width: 1280px) {
   .kpi-grid { grid-template-columns: repeat(3, 1fr); }
   .analytics-metrics-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 960px) {
-  :root { --sidebar-width: 230px; }
+/* ── ≤ 1024px — tablet landscape ── */
+@media (max-width: 1024px) {
+  :root { --sidebar-width: 240px; }
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
   .dashboard-grid { grid-template-columns: 1fr; }
   .settings-grid { grid-template-columns: 1fr; }
   .queue-overview-box { grid-template-columns: 1fr; }
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .welcome-banner { gap: 14px; }
+  .medilink-content { padding: 20px; }
+}
+
+/* ── ≤ 768px — tablet portrait / large phone ── */
+@media (max-width: 768px) {
+  /* Sidebar off-canvas */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.28s var(--ease);
+    z-index: 200;
+    width: 280px;
+  }
+
+  .sidebar.sidebar--open {
+    transform: translateX(0);
+  }
+
+  /* Backdrop visible when sidebar is open */
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 15, 30, 0.6);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 199;
+    animation: fadeIn 0.2s ease;
+  }
+
+  /* Sidebar close button visible */
+  .sidebar-mobile-close {
+    display: flex;
+  }
+
+  /* Main content full width — no sidebar offset */
+  .medilink-main {
+    margin-left: 0;
+  }
+
+  /* Header layout changes */
+  .app-header {
+    padding: 0 12px;
+    gap: 10px;
+    height: 56px;
+  }
+
+  /* Show hamburger */
+  .hamburger-btn { display: flex; }
+
+  /* Hide desktop breadcrumb (long facility name), show short page title */
+  .header-left .breadcrumbs { display: none; }
+  .mobile-page-title {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--slate-800);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+
+  /* Hide desktop search bar — use mobile toggle instead */
+  .header-search { display: none; }
+
+  /* Show mobile search toggle icon */
+  .mobile-search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-md);
+    color: var(--slate-600);
+    background: var(--slate-100);
+    border: 1.5px solid var(--border-color);
+    flex-shrink: 0;
+  }
+
+  /* Mobile expandable search bar below header */
+  .mobile-search-bar {
+    display: block;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 12px;
+    z-index: 29;
+    box-shadow: 0 4px 12px rgba(15,23,42,0.08);
+    animation: slideDown 0.18s var(--ease);
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .mobile-search-bar .search-input-wrapper input {
+    height: 40px;
+    font-size: 14px;
+  }
+
+  /* API pill text shorter */
+  .api-status-text { display: none; }
+  .api-status-pill { padding: 5px 8px; }
+
+  /* Hide date/time */
+  .header-datetime { display: none; }
+
+  /* Hide action button text, show icons only */
+  .btn-label { display: none; }
+  .header-actions .btn { padding: 7px 10px; }
+
+  /* Hide role label in user button */
+  .header-user-role { display: none; }
+
+  /* Page content */
+  .medilink-content { padding: 14px 12px 32px; }
+
+  /* KPI grid: 2 cols */
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+  /* Welcome banner stacks */
+  .welcome-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px 18px;
+    gap: 14px;
+  }
+  .welcome-text h1 { font-size: 20px; }
+  .welcome-sub { display: none; }
+  .welcome-actions { flex-direction: row; width: 100%; }
+  .welcome-actions .btn { flex: 1; justify-content: center; }
+
+  /* Queue stats: 2 cols */
+  .queue-stats-bar { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+  /* Analytics grid: 1 col */
+  .analytics-metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+  /* Vitals 2 cols */
   .vitals-grid { grid-template-columns: repeat(2, 1fr); }
+  .vitals-panel .vitals-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Detail meta banner stacks */
+  .detail-meta-banner { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Queue cards full width */
+  .queue-cards-grid { grid-template-columns: 1fr; }
+  .queue-meta-row { grid-template-columns: 1fr 1fr; }
+  .queue-vitals-row { grid-template-columns: repeat(4, 1fr); }
+
+  /* Form grids collapse */
+  .form-grid-2, .form-grid-3, .form-grid-4 { grid-template-columns: 1fr; gap: 10px; }
+
+  /* Panel headers stack on overflow */
+  .panel-header { flex-wrap: wrap; gap: 8px; }
+
+  /* Page title row stacks */
+  .page-title-row { flex-direction: column; gap: 10px; align-items: flex-start; }
+  .page-title-row h1 { font-size: 20px; }
+
+  /* Filter tabs scroll */
+  .filter-tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .filter-chip { white-space: nowrap; flex-shrink: 0; }
+
+  /* Modals full-screen-ish on mobile */
+  .modal-backdrop { padding: 0; align-items: flex-end; }
+  .modal-container {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    max-height: 92vh;
+    animation: slideUpModal 0.24s var(--ease);
+  }
+  .modal-sm, .modal-md, .modal-lg { max-width: 100%; width: 100%; }
+
+  @keyframes slideUpModal {
+    from { transform: translateY(100%); opacity: 0.8; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Subfilter row stacks */
+  .subfilter-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .subfilter-row .ml-auto { margin-left: 0; }
+
+  /* Security banner stacks */
+  .security-banner { flex-direction: column; gap: 10px; }
+}
+
+/* ── ≤ 480px — small phones ── */
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .kpi-value { font-size: 24px; }
+  .kpi-card { padding: 14px; }
+
+  .queue-stats-bar { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+  .analytics-metrics-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .analytics-metric-value { font-size: 26px; }
+
+  .vitals-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+  /* Stacked quick actions 3→2 cols */
+  .quick-actions-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .quick-action-card { padding: 10px 6px; }
+  .quick-action-card > span { font-size: 10px; }
+
+  /* Table: smaller text */
+  .data-table th { font-size: 9.5px; padding: 9px 10px; }
+  .data-table td { font-size: 12px; padding: 10px 10px; }
+
+  /* Welcome banner */
+  .welcome-text h1 { font-size: 18px; }
+  .welcome-actions { flex-direction: column; }
+  .welcome-actions .btn { flex: unset; width: 100%; }
+
+  /* Page titles */
+  .page-title-row h1 { font-size: 17px; }
+
+  .eyebrow-badge { font-size: 9px; }
+
+  /* Modal form padding tighter */
+  .modal-form { padding: 16px; }
+  .modal-header { padding: 16px 16px 14px; }
+  .modal-footer { padding: 12px 16px; }
+
+  /* Detail meta banner: 1 col */
   .detail-meta-banner { grid-template-columns: 1fr; }
+  .queue-meta-row { grid-template-columns: 1fr 1fr; }
+
+  /* Dept bar label shorter */
+  .dept-bar-label { width: 90px; font-size: 11px; }
+
+  /* Staff table: hide less critical columns */
+  .data-table .col-hide-mobile { display: none; }
+
+  /* Medilink content tighter */
+  .medilink-content { padding: 10px 10px 28px; }
+
+  /* Dashboard grid gaps */
+  .page-content { gap: 14px; }
+
+  .breadcrumbs { display: none; }
+  .mobile-page-title { max-width: 140px; }
+}
+
+/* ── ≤ 360px — very small devices ── */
+@media (max-width: 360px) {
+  .app-header { padding: 0 8px; gap: 6px; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .queue-stats-bar { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .header-actions { display: none; } /* only show from FAB on tiny screens */
+  .medilink-content { padding: 8px 8px 24px; }
+}
+
+/* ==========================================================================
+   MOBILE FAB (Floating Action Button)
+   ========================================================================== */
+
+.mobile-fab-group {
+  display: none; /* hidden on desktop */
+  position: fixed;
+  bottom: 20px;
+  right: 16px;
+  z-index: 90;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-fab {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.2), 0 2px 6px rgba(15,23,42,0.12);
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease);
+  cursor: pointer;
+  border: none;
+}
+
+.mobile-fab:active {
+  transform: scale(0.94);
+}
+
+.mobile-fab--primary {
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+  color: #ffffff;
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 6px 20px rgba(13,148,136,0.4);
+}
+
+.mobile-fab--primary:hover {
+  box-shadow: 0 8px 24px rgba(13,148,136,0.5);
+  transform: translateY(-2px);
+}
+
+.mobile-fab--secondary {
+  background: #ffffff;
+  color: var(--brand-600);
+  border: 1.5px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(15,23,42,0.12);
+}
+
+.mobile-fab--secondary:hover {
+  box-shadow: 0 6px 16px rgba(15,23,42,0.16);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
-  .medilink-main { margin-left: 0; }
-  .sidebar { transform: translateX(-100%); }
-  .app-header { padding: 0 16px; }
-  .header-datetime { display: none; }
-  .header-actions .btn span { display: none; }
-  .medilink-content { padding: 16px; }
-  .welcome-banner { flex-direction: column; }
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-  .queue-stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .mobile-fab-group { display: flex; }
+}
+
+/* ==========================================================================
+   MOBILE TABLE COLUMN HIDING HELPERS
+   ========================================================================== */
+
+/* Pages can add className="col-hide-mobile" to less critical <td>/<th> */
+@media (max-width: 480px) {
+  .col-hide-mobile { display: none !important; }
+}
+
+/* Ensure tables always scroll horizontally on mobile */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Add subtle scroll hint shadow */
+  background:
+    linear-gradient(to right, white 30%, rgba(255,255,255,0)),
+    linear-gradient(to right, rgba(255,255,255,0), white 70%) 0 100%,
+    radial-gradient(farthest-side at 0% 50%, rgba(15,23,42,0.08), rgba(255,255,255,0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(15,23,42,0.08), rgba(255,255,255,0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-position: 0 0, 100%, 0 0, 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* Minimum column widths so tables don't get too squished */
+.data-table th,
+.data-table td {
+  min-width: 80px;
+}
+
+.data-table th:first-child,
+.data-table td:first-child {
+  min-width: 60px;
+}
+
+/* ==========================================================================
+   MOBILE TOUCH IMPROVEMENTS
+   ========================================================================== */
+
+/* Larger tap targets on mobile */
+@media (max-width: 768px) {
+  .btn { min-height: 40px; }
+  .btn-sm { min-height: 36px; }
+  .btn-xs { min-height: 30px; }
+  .nav-button { min-height: 44px; padding: 10px 12px; }
+  .filter-chip { min-height: 34px; padding: 6px 14px; }
+  .pill-btn { min-height: 30px; }
+  .tab-chip { min-height: 34px; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    height: 44px;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+  .form-group textarea { height: auto; min-height: 90px; }
+
+  /* Prevent iOS tap highlight */
+  button, a { -webkit-tap-highlight-color: transparent; }
+
+  /* Queue card comfortable tap area */
+  .queue-patient-card { cursor: default; }
+  .queue-card-footer .btn { min-height: 42px; font-size: 13px; }
+
+  /* KPI cards slightly taller for thumb tap */
+  .kpi-card { min-height: 100px; }
 }

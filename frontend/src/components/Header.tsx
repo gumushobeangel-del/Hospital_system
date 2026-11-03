@@ -13,6 +13,7 @@ interface HeaderProps {
   onOpenRegister: () => void;
   onOpenAppointment: () => void;
   onOpenAuth: () => void;
+  onOpenSidebar: () => void;
   currentUser: UserAccount | null;
 }
 
@@ -27,9 +28,11 @@ export function Header({
   onOpenRegister,
   onOpenAppointment,
   onOpenAuth,
+  onOpenSidebar,
   currentUser,
 }: HeaderProps) {
   const [timeStr, setTimeStr] = useState("");
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   useEffect(() => {
     function updateClock() {
@@ -52,22 +55,35 @@ export function Header({
 
   return (
     <header className="app-header">
-      {/* Breadcrumb path */}
+      {/* Hamburger (mobile only) */}
+      <button
+        className="hamburger-btn"
+        onClick={onOpenSidebar}
+        aria-label="Open navigation"
+      >
+        <span className="hamburger-line" />
+        <span className="hamburger-line" />
+        <span className="hamburger-line" />
+      </button>
+
+      {/* Breadcrumb / Page title */}
       <div className="header-left">
         <div className="breadcrumbs">
           <span className="crumb-root">{facilityName}</span>
           <span className="crumb-sep">/</span>
           <span className="crumb-active">{activePage}</span>
         </div>
+        {/* Mobile: active page only */}
+        <span className="mobile-page-title">{activePage}</span>
       </div>
 
-      {/* Center Search Bar */}
+      {/* Center Search — desktop */}
       <div className="header-search">
         <div className="search-input-wrapper">
           <Icon name="search" size={16} className="search-icon" />
           <input
             type="search"
-            placeholder="Search patients, doctors, records, or orders..."
+            placeholder="Search patients, records..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
           />
@@ -83,28 +99,37 @@ export function Header({
         </div>
       </div>
 
-      {/* Right Actions & Status */}
+      {/* Right Actions */}
       <div className="header-right">
-        {/* Backend API status badge */}
+        {/* Mobile search toggle */}
+        <button
+          className="mobile-search-btn"
+          onClick={() => setShowMobileSearch((v) => !v)}
+          aria-label="Toggle search"
+        >
+          <Icon name="search" size={18} />
+        </button>
+
+        {/* API status pill */}
         <button
           className={`api-status-pill ${apiConnected ? "connected" : "standalone"}`}
           onClick={onCheckHealth}
-          title="Click to check FastAPI backend connectivity"
+          title="Check API connectivity"
         >
           <span className="status-dot-pulse" />
           <span className="api-status-text">
-            {apiConnected ? `API Online (${apiLatency}ms)` : "Preview Mode"}
+            {apiConnected ? `API (${apiLatency}ms)` : "Preview"}
           </span>
           <Icon name="refresh" size={12} className="refresh-icon" />
         </button>
 
-        {/* Live Date and Clock */}
+        {/* Date/time — hidden on mobile */}
         <div className="header-datetime">
           <span className="header-date">{todayStr}</span>
           <span className="header-clock">{timeStr}</span>
         </div>
 
-        {/* Action Buttons */}
+        {/* Action buttons */}
         <div className="header-actions">
           <button
             className="btn btn-sm btn-outline-teal"
@@ -112,7 +137,7 @@ export function Header({
             title="Book new consultation"
           >
             <Icon name="calendar" size={14} />
-            <span>Book Appointment</span>
+            <span className="btn-label">Book Appointment</span>
           </button>
 
           <button
@@ -121,11 +146,11 @@ export function Header({
             title="Admit new patient"
           >
             <Icon name="plus" size={15} />
-            <span>Register Patient</span>
+            <span className="btn-label">Register Patient</span>
           </button>
         </div>
 
-        {/* User Account Button */}
+        {/* User avatar */}
         <button
           className="user-header-btn"
           onClick={onOpenAuth}
@@ -139,6 +164,31 @@ export function Header({
           )}
         </button>
       </div>
+
+      {/* Mobile expandable search bar */}
+      {showMobileSearch && (
+        <div className="mobile-search-bar">
+          <div className="search-input-wrapper">
+            <Icon name="search" size={16} className="search-icon" />
+            <input
+              type="search"
+              placeholder="Search patients, records..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              autoFocus
+            />
+            {searchQuery && (
+              <button
+                className="search-clear-btn"
+                onClick={() => onSearchChange("")}
+                aria-label="Clear"
+              >
+                <Icon name="close" size={13} />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }

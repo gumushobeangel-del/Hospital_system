@@ -26,6 +26,8 @@ interface SidebarProps {
     queue: number;
   };
   facilityName: string;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export function Sidebar({
@@ -36,6 +38,8 @@ export function Sidebar({
   onLogout,
   counts,
   facilityName,
+  isOpen,
+  onClose,
 }: SidebarProps) {
   const navigationGroups: NavGroup[] = [
     {
@@ -98,98 +102,125 @@ export function Sidebar({
     },
   ];
 
+  function handleNavigate(page: string) {
+    onNavigate(page);
+    onClose(); // close sidebar on mobile after navigation
+  }
+
   return (
-    <aside className="sidebar">
-      {/* Brand & Logo */}
-      <div className="brand-header">
-        <div className="brand-logo" onClick={() => onNavigate("Overview")}>
-          <div className="brand-icon-wrap">
-            <Icon name="medical" size={20} />
-          </div>
-          <div className="brand-text">
-            <span className="brand-title">MediLink</span>
-            <span className="brand-sub">HEALTH PLATFORM</span>
-          </div>
-        </div>
-      </div>
+    <>
+      {/* Mobile backdrop overlay */}
+      {isOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
 
-      {/* Facility Switcher */}
-      <div className="facility-badge-box">
-        <div className="facility-icon-wrap">
-          <Icon name="hospital" size={16} />
-        </div>
-        <div className="facility-info">
-          <strong>{facilityName}</strong>
-          <small>Trauma Center Level II</small>
-        </div>
-      </div>
+      <aside className={`sidebar ${isOpen ? "sidebar--open" : ""}`} aria-label="Main sidebar">
+        {/* Mobile close button */}
+        <button
+          className="sidebar-mobile-close"
+          onClick={onClose}
+          aria-label="Close navigation"
+        >
+          <Icon name="close" size={20} />
+        </button>
 
-      {/* Navigation Sections */}
-      <nav className="nav-container" aria-label="Main Navigation">
-        {navigationGroups.map((group) => (
-          <div key={group.label} className="nav-section">
-            <span className="nav-heading">{group.label}</span>
-            <div className="nav-items">
-              {group.items.map((item) => {
-                const isActive = activePage === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    className={`nav-button ${isActive ? "active" : ""}`}
-                    onClick={() => onNavigate(item.id)}
-                  >
-                    <span className="nav-btn-icon">
-                      <Icon name={item.icon} size={17} />
-                    </span>
-                    <span className="nav-btn-text">{item.label}</span>
-                    {item.badge !== undefined && (
-                      <span className={`nav-badge badge-${item.badgeColor || "slate"}`}>
-                        {item.badge}
+        {/* Brand & Logo */}
+        <div className="brand-header">
+          <div className="brand-logo" onClick={() => handleNavigate("Overview")}>
+            <div className="brand-icon-wrap">
+              <Icon name="medical" size={20} />
+            </div>
+            <div className="brand-text">
+              <span className="brand-title">MediLink</span>
+              <span className="brand-sub">HEALTH PLATFORM</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Facility Badge */}
+        <div className="facility-badge-box">
+          <div className="facility-icon-wrap">
+            <Icon name="hospital" size={16} />
+          </div>
+          <div className="facility-info">
+            <strong>{facilityName}</strong>
+            <small>Trauma Center Level II</small>
+          </div>
+        </div>
+
+        {/* Navigation Sections */}
+        <nav className="nav-container" aria-label="Main Navigation">
+          {navigationGroups.map((group) => (
+            <div key={group.label} className="nav-section">
+              <span className="nav-heading">{group.label}</span>
+              <div className="nav-items">
+                {group.items.map((item) => {
+                  const isActive = activePage === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      className={`nav-button ${isActive ? "active" : ""}`}
+                      onClick={() => handleNavigate(item.id)}
+                    >
+                      <span className="nav-btn-icon">
+                        <Icon name={item.icon} size={17} />
                       </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </nav>
-
-      {/* User Session Profile Footer */}
-      <div className="sidebar-footer">
-        {currentUser ? (
-          <div className="user-profile-card">
-            <div className="user-avatar-sm">
-              {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U"}
-            </div>
-            <div className="user-info-text">
-              <strong>{currentUser.name || currentUser.email}</strong>
-              <span className={`role-pill role-${currentUser.role}`}>
-                {currentUser.role}
-              </span>
-            </div>
-            <button
-              className="btn-icon-ghost"
-              title="Sign Out"
-              onClick={onLogout}
-              aria-label="Sign Out"
-            >
-              <Icon name="logout" size={15} />
-            </button>
-          </div>
-        ) : (
-          <div className="guest-login-banner" onClick={onOpenAuth}>
-            <div className="flex items-center gap-2">
-              <span className="guest-dot" />
-              <div>
-                <strong>Signed in as Guest</strong>
-                <small className="block text-muted">Click to log in as Staff / Admin</small>
+                      <span className="nav-btn-text">{item.label}</span>
+                      {item.badge !== undefined && item.badge > 0 && (
+                        <span className={`nav-badge badge-${item.badgeColor || "slate"}`}>
+                          {item.badge}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
-            <Icon name="login" size={16} />
-          </div>
-        )}
-      </div>
-    </aside>
+          ))}
+        </nav>
+
+        {/* User Session Profile Footer */}
+        <div className="sidebar-footer">
+          {currentUser ? (
+            <div className="user-profile-card">
+              <div className="user-avatar-sm">
+                {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U"}
+              </div>
+              <div className="user-info-text">
+                <strong>{currentUser.name || currentUser.email}</strong>
+                <span className={`role-pill role-${currentUser.role}`}>
+                  {currentUser.role}
+                </span>
+              </div>
+              <button
+                className="btn-icon-ghost"
+                title="Sign Out"
+                onClick={onLogout}
+                aria-label="Sign Out"
+              >
+                <Icon name="logout" size={15} />
+              </button>
+            </div>
+          ) : (
+            <div className="guest-login-banner" onClick={onOpenAuth}>
+              <div className="flex items-center gap-2">
+                <span className="guest-dot" />
+                <div>
+                  <strong>Signed in as Guest</strong>
+                  <small className="block" style={{ color: "rgba(255,255,255,0.35)", fontSize: 10 }}>
+                    Tap to log in as Staff / Admin
+                  </small>
+                </div>
+              </div>
+              <Icon name="login" size={16} />
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
   );
 }

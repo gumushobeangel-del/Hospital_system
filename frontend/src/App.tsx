@@ -48,6 +48,7 @@ import {
 export default function App() {
   const [activePage, setActivePage] = useState("Overview");
   const [facilityName, setFacilityName] = useState("St. Jude Metropolitan Medical Center");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Clinical & Operations Data State
@@ -215,6 +216,8 @@ export default function App() {
           queue: waitingCount,
         }}
         facilityName={facilityName}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
 
       {/* Main Workspace Area */}
@@ -230,6 +233,7 @@ export default function App() {
           onOpenRegister={() => setIsRegisterOpen(true)}
           onOpenAppointment={() => setIsAppointmentOpen(true)}
           onOpenAuth={() => setIsAuthOpen(true)}
+          onOpenSidebar={() => setSidebarOpen(true)}
           currentUser={currentUser}
         />
 
@@ -399,6 +403,31 @@ export default function App() {
         onUserCreated={handleUserCreated}
         apiConnected={apiConnected}
       />
+
+      {/* Mobile FAB — quick actions */}
+      <div className="mobile-fab-group">
+        <button
+          className="mobile-fab mobile-fab--primary"
+          onClick={() => setIsRegisterOpen(true)}
+          aria-label="Register patient"
+          title="Register new patient"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 4v16m-8-8h16" />
+          </svg>
+        </button>
+        <button
+          className="mobile-fab mobile-fab--secondary"
+          onClick={() => setIsAppointmentOpen(true)}
+          aria-label="Book appointment"
+          title="Book appointment"
+        >
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <path d="M16 2v4M8 2v4M3 10h18" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 }
