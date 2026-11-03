@@ -41,19 +41,16 @@ export function InventoryPage({
         </div>
       </div>
 
-      <div className="filter-controls-card">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold text-muted">SUPPLY CATEGORY:</span>
-          {["All", "Pharmaceuticals", "Consumables", "PPE", "Diagnostic Supplies", "Surgical"].map((cat) => (
-            <button
-              key={cat}
-              className={`pill-btn ${categoryFilter === cat ? "active" : ""}`}
-              onClick={() => setCategoryFilter(cat)}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+      <div className="filter-tabs">
+        {["All", "Pharmaceuticals", "Consumables", "PPE", "Diagnostic Supplies", "Surgical"].map((cat) => (
+          <button
+            key={cat}
+            className={`filter-chip ${categoryFilter === cat ? "active" : ""}`}
+            onClick={() => setCategoryFilter(cat)}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
       <div className="panel mt-4">

@@ -27,7 +27,6 @@ export function StaffUsersPage({
       `${u.email} ${u.name || ""} ${u.role} ${u.department || ""}`
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
-
     const matchRole = roleFilter === "All" || u.role === roleFilter;
     return matchSearch && matchRole;
   });
@@ -49,63 +48,67 @@ export function StaffUsersPage({
         </div>
         <div className="flex items-center gap-2">
           {apiConnected && (
-            <button className="btn btn-secondary" onClick={onRefreshUsers} title="Refresh from API">
+            <button className="btn btn-secondary" onClick={onRefreshUsers}>
               <Icon name="refresh" size={15} /> Sync API
             </button>
           )}
           <button className="btn btn-primary" onClick={onOpenCreateUser}>
-            <Icon name="plus" size={16} /> Provision Staff Account
+            <Icon name="plus" size={16} /> Provision Account
           </button>
         </div>
       </div>
 
-      {/* Security Info Card */}
-      <div className="security-banner-card">
-        <div className="security-icon-wrap">
+      {/* Security Banner */}
+      <div className="security-banner">
+        <div
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: 12,
+            background: "rgba(20,184,166,0.15)",
+            color: "var(--brand-400)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
           <Icon name="lock" size={20} />
         </div>
-        <div className="security-text">
+        <div className="security-banner-text" style={{ flex: 1 }}>
           <strong>Cryptographic Password & Role Boundary Enforcement</strong>
           <p>
-            Accounts are secured using Argon2id hashing with server-enforced role dependencies.
+            Accounts are secured using Argon2id hashing with server-enforced role boundaries.
             {isAdmin
-              ? " You are signed in with Administrator privileges and can provision accounts."
-              : " Sign in with an Administrator account (admin@example.com) to persist accounts to PostgreSQL / SQLite."}
+              ? " You have Administrator privileges and can provision accounts."
+              : " Sign in with admin@example.com to persist accounts to the backend database."}
           </p>
         </div>
-        <div className="security-badge">
-          <Icon name="shield" size={14} />
-          <span>Stage 1 Auth Ready</span>
-        </div>
+        <span
+          className="badge badge-teal"
+          style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}
+        >
+          <Icon name="shield" size={12} /> Stage 1 Auth Ready
+        </span>
       </div>
 
-      {/* Role Filter Chips */}
-      <div className="filter-controls-card mt-4">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold text-muted">ROLE:</span>
-          {[
-            "All",
-            "administrator",
-            "doctor",
-            "nurse",
-            "receptionist",
-            "pharmacist",
-            "laboratory",
-            "accountant",
-          ].map((role) => (
+      {/* Role Filter */}
+      <div className="filter-tabs">
+        {["All", "administrator", "doctor", "nurse", "receptionist", "pharmacist", "laboratory", "accountant"].map(
+          (role) => (
             <button
               key={role}
-              className={`pill-btn ${roleFilter === role ? "active" : ""}`}
+              className={`filter-chip ${roleFilter === role ? "active" : ""}`}
               onClick={() => setRoleFilter(role)}
             >
               {role}
             </button>
-          ))}
-        </div>
+          )
+        )}
       </div>
 
       {/* Staff Table */}
-      <div className="panel mt-4">
+      <div className="panel">
         <div className="panel-header">
           <div>
             <h2>Hospital Personnel Directory</h2>
@@ -130,42 +133,52 @@ export function StaffUsersPage({
               {filtered.map((user) => (
                 <tr key={user.id}>
                   <td>
-                    <div className="patient-name-cell">
-                      <div className="patient-avatar-sm">
+                    <div className="staff-name-cell">
+                      <div className="staff-avatar">
                         {(user.name || user.email).charAt(0).toUpperCase()}
                       </div>
-                      <div>
+                      <div className="staff-name-info">
                         <strong>{user.name || user.email.split("@")[0]}</strong>
-                        <small className="block text-muted">{user.title || user.role}</small>
+                        <small>{user.title || user.role}</small>
                       </div>
                     </div>
                   </td>
-                  <td className="font-mono text-xs">{user.email}</td>
                   <td>
-                    <span className={`role-pill role-${user.role}`}>
-                      {user.role}
-                    </span>
+                    <span className="font-mono text-sm">{user.email}</span>
+                  </td>
+                  <td>
+                    <span className={`role-pill role-${user.role}`}>{user.role}</span>
                   </td>
                   <td>{user.department || "Clinical Operations"}</td>
                   <td>
-                    <span className="status-pill status-in-queue">
+                    <span className="status-pill status-completed">
                       <span className="status-dot" />
                       Active
                     </span>
                   </td>
                   <td>
-                    <span className="text-xs text-muted">
-                      <Icon name="shield" size={12} className="inline mr-1 text-teal" />
-                      Argon2id / HttpOnly
+                    <span
+                      style={{
+                        fontSize: "11.5px",
+                        color: "var(--slate-500)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 5,
+                      }}
+                    >
+                      <Icon name="shield" size={13} className="text-teal" />
+                      Argon2id · HttpOnly
                     </span>
                   </td>
                 </tr>
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="empty-table-state">
-                    <Icon name="users" size={24} />
-                    <p>No staff accounts match the filter.</p>
+                  <td colSpan={6}>
+                    <div className="empty-table-state">
+                      <Icon name="users" size={28} />
+                      <p>No staff accounts match the filter.</p>
+                    </div>
                   </td>
                 </tr>
               )}

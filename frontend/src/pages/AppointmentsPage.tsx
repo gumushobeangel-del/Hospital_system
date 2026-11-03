@@ -47,19 +47,16 @@ export function AppointmentsPage({
       </div>
 
       {/* Filter Chips */}
-      <div className="filter-controls-card">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold text-muted">STATUS:</span>
-          {["All", "Confirmed", "Waiting", "In Progress", "Completed", "Canceled"].map((st) => (
-            <button
-              key={st}
-              className={`pill-btn ${statusFilter === st ? "active" : ""}`}
-              onClick={() => setStatusFilter(st)}
-            >
-              {st}
-            </button>
-          ))}
-        </div>
+      <div className="filter-tabs">
+        {["All", "Confirmed", "Waiting", "In Progress", "Completed", "Canceled"].map((st) => (
+          <button
+            key={st}
+            className={`filter-chip ${statusFilter === st ? "active" : ""}`}
+            onClick={() => setStatusFilter(st)}
+          >
+            {st}
+          </button>
+        ))}
       </div>
 
       {/* Appointments Table */}

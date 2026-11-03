@@ -17,7 +17,9 @@ export function QueuePage({
 }: QueuePageProps) {
   const waitingList = patients.filter((p) => p.status === "In Queue");
   const inConsult = patients.filter((p) => p.status === "In Consultation");
-  const urgentCount = waitingList.filter((p) => p.priority === "Emergency" || p.priority === "Urgent").length;
+  const urgentCount = waitingList.filter(
+    (p) => p.priority === "Emergency" || p.priority === "Urgent"
+  ).length;
 
   return (
     <div className="page-content">
@@ -38,31 +40,39 @@ export function QueuePage({
       </div>
 
       {/* Queue Stats Banner */}
-      <div className="queue-metric-banner">
+      <div className="queue-stats-bar">
         <div className="queue-stat-card">
-          <span className="stat-label">TOTAL IN WAITING ROOM</span>
-          <strong className="stat-number text-teal">{waitingList.length}</strong>
-          <span className="stat-note">Patients awaiting consult</span>
+          <span className="stat-label">TOTAL WAITING</span>
+          <span className="stat-value" style={{ color: "var(--brand-600)" }}>
+            {waitingList.length}
+          </span>
+          <span className="stat-sub">Patients awaiting consult</span>
         </div>
         <div className="queue-stat-card">
-          <span className="stat-label">HIGH PRIORITY / EMERGENCY</span>
-          <strong className="stat-number text-rose">{urgentCount}</strong>
-          <span className="stat-note">Immediate triage needed</span>
+          <span className="stat-label">HIGH PRIORITY</span>
+          <span className="stat-value" style={{ color: "var(--rose-600)" }}>
+            {urgentCount}
+          </span>
+          <span className="stat-sub">Immediate triage needed</span>
         </div>
         <div className="queue-stat-card">
-          <span className="stat-label">CURRENTLY IN CONSULTATION</span>
-          <strong className="stat-number text-indigo">{inConsult.length}</strong>
-          <span className="stat-note">Active clinician rooms</span>
+          <span className="stat-label">IN CONSULTATION</span>
+          <span className="stat-value" style={{ color: "var(--indigo-600)" }}>
+            {inConsult.length}
+          </span>
+          <span className="stat-sub">Active clinician rooms</span>
         </div>
         <div className="queue-stat-card">
           <span className="stat-label">AVERAGE WAIT TIME</span>
-          <strong className="stat-number text-amber">14m</strong>
-          <span className="stat-note">Within 20m benchmark target</span>
+          <span className="stat-value" style={{ color: "var(--amber-600)" }}>
+            14m
+          </span>
+          <span className="stat-sub">Within 20m benchmark</span>
         </div>
       </div>
 
-      {/* Queue Cards Grid */}
-      <div className="panel mt-4">
+      {/* Queue Cards Panel */}
+      <div className="panel">
         <div className="panel-header">
           <div>
             <h2>Patients Waiting for Consultation</h2>
@@ -71,47 +81,85 @@ export function QueuePage({
           <span className="badge badge-amber">{waitingList.length} In Line</span>
         </div>
 
-        <div className="queue-cards-container">
+        <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
           {waitingList.map((pt, idx) => (
-            <div
-              key={pt.id}
-              className="queue-card-full"
-              onClick={() => onSelectPatient(pt)}
-            >
-              <div className="queue-index">
-                <span>QUEUE</span>
-                <strong>#{idx + 1}</strong>
-              </div>
-
-              <div className="queue-main-info">
-                <div className="flex items-center gap-2">
-                  <h3 className="queue-patient-title">{pt.name}</h3>
-                  <span className="badge badge-id">{pt.id}</span>
-                  <span className={`priority-pill priority-${pt.priority.toLowerCase()}`}>
-                    {pt.priority}
-                  </span>
+            <div key={pt.id} className="queue-patient-card">
+              {/* Card Header */}
+              <div className="queue-card-header">
+                <div className="queue-position-badge">#{idx + 1}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="queue-card-name">{pt.name}</div>
+                  <div className="queue-card-id">
+                    <span className="badge-id">{pt.id}</span>
+                  </div>
                 </div>
-                <p className="queue-meta-text">
-                  {pt.department} · Attending: <strong>{pt.attendingDoctor}</strong> · Checked in at: <strong>{pt.time}</strong>
-                </p>
-                <p className="queue-complaint">
-                  Complaint: {pt.diagnosis || "Triage assessment pending"}
-                </p>
+                <span className={`priority-pill priority-${pt.priority.toLowerCase()}`}>
+                  {pt.priority}
+                </span>
               </div>
 
-              <div className="queue-vitals-box">
+              {/* Card Body */}
+              <div className="queue-card-body">
+                <div className="queue-meta-row">
+                  <div className="queue-meta-item">
+                    <span className="meta-label">Department</span>
+                    <span className="meta-value">{pt.department}</span>
+                  </div>
+                  <div className="queue-meta-item">
+                    <span className="meta-label">Attending</span>
+                    <span className="meta-value">{pt.attendingDoctor}</span>
+                  </div>
+                  <div className="queue-meta-item">
+                    <span className="meta-label">Check-in</span>
+                    <span className="meta-value">{pt.time}</span>
+                  </div>
+                  <div className="queue-meta-item">
+                    <span className="meta-label">Age / Gender</span>
+                    <span className="meta-value">
+                      {pt.age} yrs · {pt.gender}
+                    </span>
+                  </div>
+                </div>
+
+                {pt.diagnosis && (
+                  <div className="queue-complaint-text">
+                    {pt.diagnosis}
+                  </div>
+                )}
+
                 {pt.vitals && (
-                  <div className="vitals-micro">
-                    <span>BP: <strong>{pt.vitals.bp}</strong></span>
-                    <span>HR: <strong>{pt.vitals.heartRate}</strong></span>
-                    <span>Temp: <strong>{pt.vitals.temp}</strong></span>
+                  <div className="queue-vitals-row">
+                    <div className="vital-item">
+                      <span className="vital-label">BP</span>
+                      <span className="vital-value">{pt.vitals.bp}</span>
+                    </div>
+                    <div className="vital-item">
+                      <span className="vital-label">HR</span>
+                      <span className="vital-value">{pt.vitals.heartRate}</span>
+                    </div>
+                    <div className="vital-item">
+                      <span className="vital-label">Temp</span>
+                      <span className="vital-value">{pt.vitals.temp}</span>
+                    </div>
+                    <div className="vital-item">
+                      <span className="vital-label">SpO₂</span>
+                      <span className="vital-value">{pt.vitals.spO2}%</span>
+                    </div>
                   </div>
                 )}
               </div>
 
-              <div className="queue-card-action">
+              {/* Card Footer */}
+              <div className="queue-card-footer" style={{ display: "flex", gap: "8px" }}>
+                <button
+                  className="btn btn-xs btn-outline"
+                  onClick={() => onSelectPatient(pt)}
+                >
+                  <Icon name="document" size={13} /> View File
+                </button>
                 <button
                   className="btn btn-sm btn-primary"
+                  style={{ marginLeft: "auto" }}
                   onClick={(e) => {
                     e.stopPropagation();
                     onUpdateStatus(pt.id, "In Consultation");
@@ -124,12 +172,14 @@ export function QueuePage({
           ))}
 
           {waitingList.length === 0 && (
-            <div className="empty-table-state">
-              <Icon name="activity" size={32} />
-              <h3>The queue is currently clear</h3>
+            <div className="empty-state-card">
+              <div className="empty-icon">
+                <Icon name="activity" size={26} />
+              </div>
+              <h3>Queue is currently clear</h3>
               <p>All registered patients have been seen or are in consultation rooms.</p>
               <button className="btn btn-secondary mt-2" onClick={onOpenRegister}>
-                Admit Walk-in Patient
+                <Icon name="plus" size={15} /> Admit Walk-in Patient
               </button>
             </div>
           )}

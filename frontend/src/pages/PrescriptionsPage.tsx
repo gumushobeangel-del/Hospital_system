@@ -41,19 +41,16 @@ export function PrescriptionsPage({
         </div>
       </div>
 
-      <div className="filter-controls-card">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-muted">DISPENSARY STATUS:</span>
-          {["All", "Pending Review", "Ready for Pickup", "Dispensed"].map((st) => (
-            <button
-              key={st}
-              className={`pill-btn ${filterStatus === st ? "active" : ""}`}
-              onClick={() => setFilterStatus(st)}
-            >
-              {st}
-            </button>
-          ))}
-        </div>
+      <div className="filter-tabs">
+        {["All", "Pending Review", "Ready for Pickup", "Dispensed"].map((st) => (
+          <button
+            key={st}
+            className={`filter-chip ${filterStatus === st ? "active" : ""}`}
+            onClick={() => setFilterStatus(st)}
+          >
+            {st}
+          </button>
+        ))}
       </div>
 
       <div className="panel mt-4">

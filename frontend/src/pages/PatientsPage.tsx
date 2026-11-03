@@ -62,7 +62,7 @@ export function PatientsPage({
             className={`tab-chip ${selectedDept === "All" ? "active" : ""}`}
             onClick={() => setSelectedDept("All")}
           >
-            All Departments ({patients.length})
+            All Departments <span className="tab-count">{patients.length}</span>
           </button>
           {departmentsList.map((dep) => {
             const count = patients.filter((p) => p.department === dep).length;

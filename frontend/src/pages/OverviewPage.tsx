@@ -71,7 +71,7 @@ export function OverviewPage({
 
       {/* Primary KPI Metrics Grid */}
       <section className="kpi-grid" aria-label="Key facility indicators">
-        <div className="kpi-card" onClick={() => onNavigate("Patients")}>
+        <div className="kpi-card kpi-teal" onClick={() => onNavigate("Patients")}>
           <div className="kpi-header">
             <span className="kpi-label">TOTAL PATIENTS</span>
             <div className="kpi-icon-wrap teal">
@@ -85,7 +85,7 @@ export function OverviewPage({
           <span className="kpi-subtext">Active clinical records in workspace</span>
         </div>
 
-        <div className="kpi-card" onClick={() => onNavigate("Queue")}>
+        <div className="kpi-card kpi-amber" onClick={() => onNavigate("Queue")}>
           <div className="kpi-header">
             <span className="kpi-label">ACTIVE TRIAGE QUEUE</span>
             <div className="kpi-icon-wrap amber">
@@ -99,7 +99,7 @@ export function OverviewPage({
           <span className="kpi-subtext">Avg waiting time: ~14 mins</span>
         </div>
 
-        <div className="kpi-card" onClick={() => onNavigate("Appointments")}>
+        <div className="kpi-card kpi-indigo" onClick={() => onNavigate("Appointments")}>
           <div className="kpi-header">
             <span className="kpi-label">TODAY'S SCHEDULE</span>
             <div className="kpi-icon-wrap indigo">
@@ -113,7 +113,7 @@ export function OverviewPage({
           <span className="kpi-subtext">Next: Dr. Sarah Chen (09:30)</span>
         </div>
 
-        <div className="kpi-card" onClick={() => onNavigate("Lab reports")}>
+        <div className="kpi-card kpi-rose" onClick={() => onNavigate("Lab reports")}>
           <div className="kpi-header">
             <span className="kpi-label">DIAGNOSTIC LABS</span>
             <div className="kpi-icon-wrap rose">
@@ -127,7 +127,7 @@ export function OverviewPage({
           <span className="kpi-subtext">Pathology, Hematology & Biochem</span>
         </div>
 
-        <div className="kpi-card" onClick={() => onNavigate("Prescriptions")}>
+        <div className="kpi-card kpi-emerald" onClick={() => onNavigate("Prescriptions")}>
           <div className="kpi-header">
             <span className="kpi-label">PHARMACY ORDERS</span>
             <div className="kpi-icon-wrap emerald">
